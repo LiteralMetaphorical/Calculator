@@ -8,6 +8,7 @@ class Calculator extends React.Component {
     }
     this.handleClick = this.handleClick.bind(this);
   }
+  //listen to click on any calculator buttons and react accordingly
   handleClick(event) {
     let operators = ["+", "-", "/", "*"];
     let length = this.state.currentInput.length;
@@ -24,11 +25,10 @@ class Calculator extends React.Component {
         }
       case "=":
         let copy = this.state.currentInput.slice(0);
-        let indexE = eval(copy).toString().indexOf("e");
-        console.log(indexE);
+        let indexE = eval(copy).toString().indexOf("e"); //check if currently displayed value has a scientific notation "e"
         this.setState({
           currentInput: eval(copy).toString(),
-          display: (eval(copy).toString().indexOf("e") == -1 ? eval(copy).toString().slice(0, 10) : eval(copy).toString().slice(0, 7) + eval(copy).toString().slice(indexE))
+          display: (eval(copy).toString().indexOf("e") == -1 ? eval(copy).toString().slice(0, 10) : eval(copy).toString().slice(0, 7) + eval(copy).toString().slice(indexE)) //handle cases when current value has scientific notation "e"
         });
         break;
       case "÷":
@@ -85,6 +85,8 @@ class Calculator extends React.Component {
           });
           break;
         } else {
+          //check for decimal numbers, if number is decimal, block a new "." input, unless there is an operator between numbers seperating them
+          //for example, block inputs like "1.5.5"
           if ((this.state.currentInput.lastIndexOf(".") > this.state.currentInput.lastIndexOf("+")) && (this.state.currentInput.lastIndexOf("+")) != -1 ||
              (this.state.currentInput.lastIndexOf(".") > this.state.currentInput.lastIndexOf("*") && (this.state.currentInput.lastIndexOf("*")) != -1) ||
              (this.state.currentInput.lastIndexOf(".") > this.state.currentInput.lastIndexOf("/") && (this.state.currentInput.lastIndexOf("/")) != -1) ||
@@ -138,7 +140,7 @@ class Calculator extends React.Component {
   render() {
     let buttonArr = ["clear", "multiply", "seven", "eight", "nine", "four", "five", "six", "one", "two", "three", "zero", "decimal", "divide", "subtract", "add", "equals"];
     let symbolArr=["AC", "×", "7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "÷", "-", "+", "="];
-    let elements = buttonArr.map((item, index) => {
+    let elements = buttonArr.map((item, index) => { //map button names from buttonArr to their UI symbols from symbolsArr
       return <div className="button" onClick={this.handleClick} key={item + index} id={item}><h1>{symbolArr[index]}</h1></div>
     });
     return (
